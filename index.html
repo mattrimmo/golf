@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matt's Golf Toolkit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --green-deep:#173628; --green-mid:#2c5c44; --green-line:#3f7857;
-    --cream:#f6f1e2; --paper:#fbf8ef; --ink:#1c1b16; --ink-soft:#5b5847;
-    --hairline:#d9d0b4; --red:#a8362a; --red-soft:#c8564a; --gold:#b58a2e;
+    --green-deep:#163a2f; --green-mid:#235e49; --green-line:#4a8f6f;
+    --cream:#f4f3ee; --paper:#fcfcfa; --ink:#16150f; --ink-soft:#55524a;
+    --hairline:#dcdad0; --red:#8c2a2b; --red-soft:#a8423f; --gold:#c3a468; --navy:#00205b; --navy-soft:#1b3b7a;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{background:var(--cream); color:var(--ink); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;}
 
-  header.top{background:var(--green-deep); color:var(--cream); padding:34px 24px 26px; border-bottom:4px solid var(--red); position:relative;}
+  header.top{background:var(--green-deep); color:var(--cream); padding:34px 24px 26px; border-bottom:3px solid var(--gold); position:relative;}
   header.top:before{
     content:""; position:absolute; inset:0;
     background-image:repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 64px);
@@ -24,8 +24,12 @@
   }
   .top-inner{max-width:1000px; margin:0 auto; position:relative;}
   .eyebrow{font-family:'Barlow Condensed',sans-serif; letter-spacing:0.24em; text-transform:uppercase; font-size:12px; color:var(--gold); font-weight:600;}
-  h1.title{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:46px; margin:6px 0 8px; line-height:1;}
+  h1.title{font-family:'Fraunces',serif; font-weight:600; font-size:46px; margin:6px 0 8px; line-height:0.98; letter-spacing:-0.01em;}
   .subtitle{font-size:14.5px; color:#cfe0d3; max-width:600px;}
+  .crest{
+    position:absolute; top:26px; right:24px; width:50px; height:50px; opacity:0.92;
+  }
+  @media(max-width:640px){ .crest{width:36px; height:36px; top:20px; right:16px;} }
 
   main{max-width:1000px; margin:0 auto; padding:34px 24px 70px;}
 
@@ -35,7 +39,7 @@
     display:block; background:var(--paper); border:1px solid var(--hairline); border-left:4px solid var(--green-mid);
     padding:22px 22px 20px; text-decoration:none; color:var(--ink); position:relative; transition:border-color 0.15s;
   }
-  a.tool-card:hover{border-left-color:var(--red);}
+  a.tool-card:hover{border-left-color:var(--navy);}
   a.tool-card .no{
     position:absolute; top:18px; right:20px; font-family:'Barlow Condensed',sans-serif;
     font-size:13px; color:var(--ink-soft); letter-spacing:0.06em;
@@ -61,6 +65,12 @@
 
 <header class="top">
   <div class="top-inner">
+    <svg class="crest" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <line x1="50" y1="14" x2="50" y2="80" stroke="var(--gold)" stroke-width="2.5"/>
+      <path d="M50 14 L88 26 L50 38 Z" fill="var(--gold)"/>
+      <ellipse cx="50" cy="84" rx="20" ry="5" fill="none" stroke="var(--gold)" stroke-width="2" opacity="0.6"/>
+      <circle cx="50" cy="84" r="3.5" fill="var(--gold)"/>
+    </svg>
     <div class="eyebrow">Whalebone Golf Centre &middot; Self-Directed Improvement</div>
     <h1 class="title">Matt's Golf Toolkit</h1>
     <div class="subtitle">One place for everything &mdash; swing data, video, and equipment decisions, all built to work together instead of living as separate one-off tools.</div>
