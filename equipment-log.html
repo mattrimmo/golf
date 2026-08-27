@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Equipment Log — Matt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-deep:#173628; --green-mid:#2c5c44; --green-line:#3f7857;
+    --cream:#f6f1e2; --paper:#fbf8ef; --ink:#1c1b16; --ink-soft:#5b5847;
+    --hairline:#d9d0b4; --red:#a8362a; --red-soft:#c8564a; --gold:#b58a2e;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--cream); color:var(--ink); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;}
+  .display{font-family:'Barlow Condensed',sans-serif;}
+
+  header.top{background:var(--green-deep); color:var(--cream); padding:26px 24px 20px; border-bottom:4px solid var(--red);}
+  .top-inner{max-width:1180px; margin:0 auto;}
+  .eyebrow{font-family:'Barlow Condensed',sans-serif; letter-spacing:0.22em; text-transform:uppercase; font-size:12px; color:var(--gold); font-weight:600;}
+  h1.title{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:40px; margin:4px 0 6px; line-height:1;}
+  .subtitle{font-size:14px; color:#cfe0d3; max-width:640px;}
+
+  main{max-width:1180px; margin:0 auto; padding:26px 24px 80px;}
+
+  h2.section-title{
+    font-family:'Barlow Condensed',sans-serif; font-size:24px; font-weight:700;
+    border-bottom:2px solid var(--green-deep); padding-bottom:6px; margin:0 0 4px;
+  }
+  p.section-note{color:var(--ink-soft); font-size:13.5px; margin:6px 0 20px; max-width:760px;}
+
+  .kpi-row{display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:14px; margin-bottom:28px;}
+  .kpi{background:var(--paper); border:1px solid var(--hairline); border-left:4px solid var(--green-mid); padding:12px 14px;}
+  .kpi .label{font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); font-weight:600;}
+  .kpi .value{font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:700; line-height:1.1; margin-top:4px;}
+
+  .panel{background:var(--paper); border:1px dashed var(--green-line); padding:20px; margin-bottom:26px;}
+  .panel h3{font-family:'Barlow Condensed',sans-serif; font-size:18px; margin:0 0 6px;}
+  .panel p{font-size:13px; color:var(--ink-soft); margin:0 0 14px; max-width:640px;}
+  .form-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:10px; margin-bottom:12px;}
+  label.field{font-family:'Barlow Condensed',sans-serif; font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); display:block; margin-bottom:3px;}
+  input[type=text], input[type=number], input[type=date], select, textarea{
+    font-family:'Inter',sans-serif; font-size:13px; padding:7px 9px; border:1px solid var(--hairline); background:#fff; width:100%;
+  }
+  button.primary{
+    font-family:'Barlow Condensed',sans-serif; background:var(--red); color:#fff; border:none;
+    padding:9px 20px; font-size:14px; letter-spacing:0.03em; text-transform:uppercase; cursor:pointer; font-weight:600;
+  }
+  button.primary:hover{background:var(--red-soft);}
+  button.ghost{
+    font-family:'Barlow Condensed',sans-serif; background:none; color:var(--green-deep); border:1px solid var(--green-deep);
+    padding:7px 14px; font-size:12.5px; text-transform:uppercase; cursor:pointer; font-weight:600;
+  }
+  button.ghost.danger{color:var(--red); border-color:var(--red);}
+  button.ghost.danger:hover{background:var(--red); color:#fff;}
+
+  table.scorecard{width:100%; border-collapse:collapse; font-size:13px; background:var(--paper); margin-bottom:10px;}
+  table.scorecard th, table.scorecard td{border-bottom:1px solid var(--hairline); padding:8px 10px; text-align:left; vertical-align:top;}
+  table.scorecard th{
+    font-family:'Barlow Condensed',sans-serif; text-transform:uppercase; font-size:11px; letter-spacing:0.06em;
+    color:var(--ink-soft); border-bottom:2px solid var(--green-deep);
+  }
+  table.scorecard td.num{font-variant-numeric:tabular-nums;}
+  table.scorecard tr:nth-child(even){background:rgba(63,120,87,0.05);}
+  .status-pill{
+    display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:11px; text-transform:uppercase;
+    letter-spacing:0.04em; padding:2px 9px; font-weight:600;
+  }
+  .status-considering{background:#e9e2c8; color:#7a5f1f;}
+  .status-testing{background:#dce8e0; color:var(--green-deep);}
+  .status-bought{background:var(--green-deep); color:#fff;}
+  .status-rejected{background:#f0dcd8; color:var(--red);}
+  .empty-state{padding:40px 20px; text-align:center; color:var(--ink-soft); font-size:14px; border:1px dashed var(--hairline);}
+  .row-notes{font-size:12px; color:var(--ink-soft); max-width:260px;}
+  .del-btn{background:none; border:none; color:var(--red); cursor:pointer; font-size:12px; font-family:'Barlow Condensed',sans-serif; text-transform:uppercase;}
+
+  footer{max-width:1180px; margin:0 auto; padding:0 24px 40px; color:var(--ink-soft); font-size:11.5px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="eyebrow">Bag &amp; Purchase Decisions</div>
+    <h1 class="title">Equipment Log</h1>
+    <div class="subtitle">Every club you're considering, testing, or have bought — with your own reasoning attached, not just a wishlist.</div>
+  </div>
+</header>
+
+<main>
+  <div class="kpi-row" id="kpi-row"></div>
+
+  <div class="panel">
+    <h3>Log an Item</h3>
+    <p>Add anything you're considering, currently testing, or have already bought. Priority helps sort what's worth chasing next given the gap wedge is the most urgent.</p>
+    <div class="form-grid">
+      <div><label class="field">Category</label>
+        <select id="f-category">
+          <option>Driver</option><option>Fairway Wood</option><option>Hybrid</option>
+          <option>Irons</option><option>Wedge</option><option>Putter</option><option>Other</option>
+        </select>
+      </div>
+      <div><label class="field">Item Name</label><input type="text" id="f-name" placeholder="e.g. Ping G410 SFT"></div>
+      <div><label class="field">Price (£)</label><input type="number" id="f-price" placeholder="180"></div>
+      <div><label class="field">Status</label>
+        <select id="f-status">
+          <option value="considering">Considering</option>
+          <option value="testing">Testing</option>
+          <option value="bought">Bought</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+      <div><label class="field">Priority</label>
+        <select id="f-priority">
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+      <div><label class="field">Date Logged</label><input type="date" id="f-date"></div>
+    </div>
+    <label class="field">Notes / Reasoning</label>
+    <textarea id="f-notes" rows="2" placeholder="e.g. Steel shaft, prefer the feedback over graphite. Draw bias suits the outside-in tendency."></textarea>
+    <div style="margin-top:12px;"><button class="primary" id="add-btn">Add to Log</button></div>
+  </div>
+
+  <h2 class="section-title">Current Log</h2>
+  <p class="section-note">Sorted by priority, then status. Bought items stay on record as your current bag reference.</p>
+  <div id="log-output"></div>
+
+  <div class="panel">
+    <h3>Reset Local Data</h3>
+    <p>Clears everything logged on this device.</p>
+    <button class="ghost danger" id="reset-btn">Reset Equipment Log</button>
+  </div>
+</main>
+
+<footer>Equipment Log &middot; part of Matt's low-cost golf toolkit &middot; data stored locally in this browser only</footer>
+
+<script>
+(function(){
+  "use strict";
+  var STORAGE_KEY = "equipmentlog_items_v1";
+  var storageOK = true;
+  try { localStorage.setItem("__t","1"); localStorage.removeItem("__t"); } catch(e){ storageOK = false; }
+  var store = storageOK ? localStorage : (typeof sessionStorage !== "undefined" ? sessionStorage : null);
+
+  var SEED_ITEMS = [
+    { id:"seed1", category:"Wedge", name:"Gap Wedge (unspecified model)", price:null, status:"considering", priority:"high", date:"2026-07-01", notes:"Most urgent purchase priority — current bag gap." },
+    { id:"seed2", category:"Driver", name:"Ping G410 SFT (10.5°, Alta CB 55R)", price:180, status:"considering", priority:"medium", date:"2026-07-05", notes:"Assessed positively — draw bias, steel-adjacent feel preference noted separately for irons." },
+    { id:"seed3", category:"Driver", name:"Ping G425 SFT", price:220, status:"considering", priority:"low", date:"2026-07-05", notes:"Ideal step-up from the G410 if found under £220." },
+    { id:"seed4", category:"Driver", name:"Callaway Big Bertha Warbird", price:null, status:"rejected", priority:"low", date:"2026-07-10", notes:"Removed from course strategy — severe overclosing made it unreliable off the tee." },
+    { id:"seed5", category:"Irons", name:"Dunlop irons (current bag)", price:null, status:"bought", priority:"medium", date:"2026-06-01", notes:"Currently playing these — baseline for comparison against other iron options." },
+    { id:"seed6", category:"Irons", name:"Takomo 101 MKII (graphite Regular, 5-PW)", price:null, status:"considering", priority:"medium", date:"2026-07-20", notes:"Standard grip/length/lie. Graphite noted as a concern — prefers steel feedback." },
+    { id:"seed7", category:"Irons", name:"Titleist DCI 5 (steel, stiff shaft)", price:null, status:"testing", priority:"medium", date:"2026-07-25", notes:"Found at dad's house — plan to test against the Dunlops at the range. Steel shaft aligns with stated preference for control/feedback over graphite." }
+  ];
+
+  function loadItems(){
+    if (!store) return SEED_ITEMS.slice();
+    try {
+      var raw = store.getItem(STORAGE_KEY);
+      if (raw === null){
+        store.setItem(STORAGE_KEY, JSON.stringify(SEED_ITEMS));
+        return SEED_ITEMS.slice();
+      }
+      return JSON.parse(raw);
+    } catch(e){ return SEED_ITEMS.slice(); }
+  }
+  function saveItems(items){ if (store) store.setItem(STORAGE_KEY, JSON.stringify(items)); }
+
+  var ITEMS = loadItems();
+
+  var PRIORITY_ORDER = { high:0, medium:1, low:2 };
+  var STATUS_ORDER = { testing:0, considering:1, bought:2, rejected:3 };
+
+  function fmtPrice(p){ return (p === null || p === undefined || p === "") ? "—" : "£" + p; }
+  function fmtDate(d){
+    if (!d) return "—";
+    var dt = new Date(d + "T00:00:00");
+    var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    return dt.getDate() + " " + months[dt.getMonth()] + " " + dt.getFullYear();
+  }
+
+  function renderKPIs(){
+    var row = document.getElementById("kpi-row");
+    row.innerHTML = "";
+    var total = ITEMS.length;
+    var highPriority = ITEMS.filter(function(i){ return i.priority === "high" && i.status !== "bought" && i.status !== "rejected"; }).length;
+    var testing = ITEMS.filter(function(i){ return i.status === "testing"; }).length;
+    var bought = ITEMS.filter(function(i){ return i.status === "bought"; }).length;
+    var kpis = [
+      { label:"Items Logged", value: total },
+      { label:"High Priority Open", value: highPriority },
+      { label:"Currently Testing", value: testing },
+      { label:"Bought / In Bag", value: bought }
+    ];
+    kpis.forEach(function(k){
+      var div = document.createElement("div");
+      div.className = "kpi";
+      div.innerHTML = "<div class='label'>"+k.label+"</div><div class='value'>"+k.value+"</div>";
+      row.appendChild(div);
+    });
+  }
+
+  function renderTable(){
+    var out = document.getElementById("log-output");
+    if (!ITEMS.length){
+      out.innerHTML = '<div class="empty-state">Nothing logged yet — add your first item above.</div>';
+      return;
+    }
+    var sorted = ITEMS.slice().sort(function(a,b){
+      var p = PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority];
+      if (p !== 0) return p;
+      return STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
+    });
+    var table = document.createElement("table");
+    table.className = "scorecard";
+    var head = "<thead><tr><th>Category</th><th>Item</th><th class='num'>Price</th><th>Status</th><th>Priority</th><th>Logged</th><th>Notes</th><th></th></tr></thead>";
+    var rows = sorted.map(function(item){
+      var pillClass = "status-" + item.status;
+      var pillLabel = item.status.charAt(0).toUpperCase() + item.status.slice(1);
+      return "<tr><td>"+item.category+"</td><td><strong>"+item.name+"</strong></td>"+
+        "<td class='num'>"+fmtPrice(item.price)+"</td>"+
+        "<td><span class='status-pill "+pillClass+"'>"+pillLabel+"</span></td>"+
+        "<td style='text-transform:capitalize;'>"+item.priority+"</td>"+
+        "<td>"+fmtDate(item.date)+"</td>"+
+        "<td class='row-notes'>"+(item.notes||"")+"</td>"+
+        "<td><button class='del-btn' data-id='"+item.id+"'>Remove</button></td></tr>";
+    }).join("");
+    table.innerHTML = head + "<tbody>" + rows + "</tbody>";
+    out.innerHTML = "";
+    out.appendChild(table);
+    var delBtns = out.querySelectorAll(".del-btn");
+    for (var i=0;i<delBtns.length;i++){
+      delBtns[i].addEventListener("click", function(){
+        var id = this.getAttribute("data-id");
+        ITEMS = ITEMS.filter(function(it){ return it.id !== id; });
+        saveItems(ITEMS);
+        renderAll();
+      });
+    }
+  }
+
+  function renderAll(){ renderKPIs(); renderTable(); }
+
+  document.getElementById("add-btn").addEventListener("click", function(){
+    var name = document.getElementById("f-name").value.trim();
+    if (!name){ alert("Give the item a name first."); return; }
+    var priceRaw = document.getElementById("f-price").value;
+    var item = {
+      id: "item_" + Date.now(),
+      category: document.getElementById("f-category").value,
+      name: name,
+      price: priceRaw === "" ? null : parseFloat(priceRaw),
+      status: document.getElementById("f-status").value,
+      priority: document.getElementById("f-priority").value,
+      date: document.getElementById("f-date").value || new Date().toISOString().substring(0,10),
+      notes: document.getElementById("f-notes").value.trim()
+    };
+    ITEMS.push(item);
+    saveItems(ITEMS);
+    document.getElementById("f-name").value = "";
+    document.getElementById("f-price").value = "";
+    document.getElementById("f-notes").value = "";
+    document.getElementById("f-date").value = "";
+    renderAll();
+  });
+
+  document.getElementById("reset-btn").addEventListener("click", function(){
+    if (confirm("Reset the equipment log? This clears everything you've added on this device and reverts to the starting list.")){
+      ITEMS = SEED_ITEMS.slice();
+      saveItems(ITEMS);
+      renderAll();
+    }
+  });
+
+  renderAll();
+})();
+</script>
+</body>
+</html>

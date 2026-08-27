@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swing Video Compare — Matt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-deep:#173628; --green-mid:#2c5c44; --green-line:#3f7857;
+    --cream:#f6f1e2; --paper:#fbf8ef; --ink:#1c1b16; --ink-soft:#5b5847;
+    --hairline:#d9d0b4; --red:#a8362a; --red-soft:#c8564a; --gold:#b58a2e;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--cream); color:var(--ink); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;}
+  .display{font-family:'Barlow Condensed',sans-serif;}
+
+  header.top{background:var(--green-deep); color:var(--cream); padding:26px 24px 20px; border-bottom:4px solid var(--red);}
+  .top-inner{max-width:1180px; margin:0 auto;}
+  .eyebrow{font-family:'Barlow Condensed',sans-serif; letter-spacing:0.22em; text-transform:uppercase; font-size:12px; color:var(--gold); font-weight:600;}
+  h1.title{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:40px; margin:4px 0 6px; line-height:1;}
+  .subtitle{font-size:14px; color:#cfe0d3; max-width:640px;}
+
+  main{max-width:1180px; margin:0 auto; padding:26px 24px 80px;}
+
+  h2.section-title{
+    font-family:'Barlow Condensed',sans-serif; font-size:24px; font-weight:700;
+    border-bottom:2px solid var(--green-deep); padding-bottom:6px; margin:0 0 4px;
+  }
+  p.section-note{color:var(--ink-soft); font-size:13.5px; margin:6px 0 20px; max-width:760px;}
+
+  .compare-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px;}
+  @media(max-width:760px){ .compare-grid{grid-template-columns:1fr;} }
+
+  .video-panel{background:var(--paper); border:1px solid var(--hairline); padding:14px;}
+  .video-panel h3{font-family:'Barlow Condensed',sans-serif; font-size:17px; margin:0 0 8px; text-transform:uppercase; letter-spacing:0.03em;}
+  .video-panel video{width:100%; background:#000; display:block; margin-bottom:8px;}
+  .video-panel .empty-video{
+    width:100%; aspect-ratio:16/9; background:#0f2419; color:#cfe0d3; display:flex;
+    align-items:center; justify-content:center; font-size:13px; margin-bottom:8px; text-align:center; padding:20px;
+  }
+  .file-label{
+    display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:0.03em;
+    text-transform:uppercase; background:var(--green-deep); color:#fff; padding:7px 14px; cursor:pointer; font-weight:600;
+  }
+  .file-label:hover{background:var(--green-mid);}
+  input[type=file]{display:none;}
+  .clip-meta{font-size:12px; color:var(--ink-soft); margin-top:6px;}
+  .flip-btn{
+    font-family:'Barlow Condensed',sans-serif; font-size:12px; background:none; border:1px solid var(--hairline);
+    padding:4px 10px; cursor:pointer; margin-left:8px; text-transform:uppercase;
+  }
+  .flip-btn.active{background:var(--green-deep); color:#fff; border-color:var(--green-deep);}
+  .mirrored{transform:scaleX(-1);}
+
+  .transport{
+    background:var(--paper); border:1px solid var(--hairline); padding:16px 18px; margin-bottom:24px;
+  }
+  .transport h3{font-family:'Barlow Condensed',sans-serif; font-size:17px; margin:0 0 10px; text-transform:uppercase; letter-spacing:0.03em;}
+  .transport-row{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:10px;}
+  button.primary{
+    font-family:'Barlow Condensed',sans-serif; background:var(--red); color:#fff; border:none;
+    padding:9px 18px; font-size:14px; letter-spacing:0.03em; text-transform:uppercase; cursor:pointer; font-weight:600;
+  }
+  button.primary:hover{background:var(--red-soft);}
+  button.ghost{
+    font-family:'Barlow Condensed',sans-serif; background:none; color:var(--green-deep); border:1px solid var(--green-deep);
+    padding:8px 16px; font-size:13px; text-transform:uppercase; cursor:pointer; font-weight:600;
+  }
+  button.ghost:hover{background:var(--green-deep); color:#fff;}
+  select{font-family:'Inter',sans-serif; font-size:13px; padding:6px 10px; border:1px solid var(--hairline); background:#fff;}
+  .checkpoint-row{display:flex; gap:8px; flex-wrap:wrap;}
+  .checkpoint-btn{
+    font-family:'Barlow Condensed',sans-serif; font-size:12.5px; background:#fff; border:1px solid var(--hairline);
+    padding:6px 12px; cursor:pointer; text-transform:uppercase;
+  }
+  .checkpoint-btn.set{border-color:var(--green-mid); color:var(--green-deep); font-weight:600;}
+
+  .panel{background:var(--paper); border:1px dashed var(--green-line); padding:20px; margin-bottom:24px;}
+  .panel h3{font-family:'Barlow Condensed',sans-serif; font-size:18px; margin:0 0 6px;}
+  .panel p{font-size:13px; color:var(--ink-soft); margin:0 0 14px; max-width:640px;}
+  input[type=text], textarea{
+    font-family:'Inter',sans-serif; font-size:13px; padding:8px 10px; border:1px solid var(--hairline);
+    background:#fff; width:100%;
+  }
+  .note-log{margin-top:18px;}
+  .note-item{display:flex; gap:10px; padding:8px 0; border-bottom:1px solid var(--hairline); font-size:13px; align-items:baseline;}
+  .note-item .nd{font-family:'Barlow Condensed',sans-serif; font-weight:700; min-width:90px; color:var(--green-deep);}
+
+  footer{max-width:1180px; margin:0 auto; padding:0 24px 40px; color:var(--ink-soft); font-size:11.5px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="eyebrow">Cross-Check &middot; What SwingSync Predicts vs What The Camera Sees</div>
+    <h1 class="title">Swing Video Compare</h1>
+    <div class="subtitle">Load two clips side by side, slow them down together, and check what actually happened against what the tracker predicted.</div>
+  </div>
+</header>
+
+<main>
+  <h2 class="section-title">Load Two Clips</h2>
+  <p class="section-note">Any two swings — a recent one against an older one, a good session against a rough one, or a swing that had a surprising SwingSync reading you want to eyeball directly. Nothing leaves your device; the videos are read straight from your files and never uploaded anywhere.</p>
+
+  <div class="compare-grid">
+    <div class="video-panel">
+      <h3>Clip A</h3>
+      <div id="video-a-holder"><div class="empty-video">No clip loaded</div></div>
+      <label class="file-label">Choose Video<input type="file" id="file-a" accept="video/*"></label>
+      <button class="flip-btn" id="flip-a">Mirror</button>
+      <div class="clip-meta" id="meta-a"></div>
+    </div>
+    <div class="video-panel">
+      <h3>Clip B</h3>
+      <div id="video-b-holder"><div class="empty-video">No clip loaded</div></div>
+      <label class="file-label">Choose Video<input type="file" id="file-b" accept="video/*"></label>
+      <button class="flip-btn" id="flip-b">Mirror</button>
+      <div class="clip-meta" id="meta-b"></div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <h3>Synced Controls</h3>
+    <div class="transport-row">
+      <button class="primary" id="play-both">Play Both</button>
+      <button class="ghost" id="pause-both">Pause Both</button>
+      <button class="ghost" id="restart-both">Restart Both</button>
+      <button class="ghost" id="step-back">&larr; Step</button>
+      <button class="ghost" id="step-fwd">Step &rarr;</button>
+      <label style="font-family:'Barlow Condensed',sans-serif; font-size:13px; text-transform:uppercase; margin-left:6px;">Speed
+        <select id="speed-select">
+          <option value="1">1x (full)</option>
+          <option value="0.5" selected>0.5x</option>
+          <option value="0.25">0.25x</option>
+          <option value="0.1">0.1x (very slow)</option>
+        </select>
+      </label>
+    </div>
+    <div class="transport-row">
+      <span style="font-family:'Barlow Condensed',sans-serif; font-size:13px; text-transform:uppercase; color:var(--ink-soft);">Mark checkpoint on both:</span>
+      <div class="checkpoint-row">
+        <button class="checkpoint-btn" data-cp="address">Address</button>
+        <button class="checkpoint-btn" data-cp="top">Top of Backswing</button>
+        <button class="checkpoint-btn" data-cp="impact">Impact</button>
+        <button class="checkpoint-btn" data-cp="finish">Finish</button>
+      </div>
+    </div>
+    <div class="transport-row" id="checkpoint-jump" style="display:none;">
+      <span style="font-family:'Barlow Condensed',sans-serif; font-size:13px; text-transform:uppercase; color:var(--ink-soft);">Jump both to:</span>
+      <div class="checkpoint-row" id="checkpoint-jump-buttons"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Log What You See</h3>
+    <p>A quick note on what the video actually showed versus what the numbers said — useful to have on file next time a session's numbers look surprising.</p>
+    <input type="text" id="note-date" placeholder="Date (e.g. 2026-08-27)" style="margin-bottom:8px;">
+    <textarea id="note-text" rows="2" placeholder="e.g. Driver path looked fine on video despite the -10.5 reading — likely a mishit-heavy session skewing the prediction"></textarea>
+    <div style="margin-top:10px;"><button class="primary" id="note-btn">Save Note</button></div>
+    <div class="note-log" id="note-log"></div>
+  </div>
+</main>
+
+<footer>Swing Video Compare &middot; part of Matt's low-cost golf toolkit &middot; videos stay on your device, only your notes are saved locally</footer>
+
+<script>
+(function(){
+  "use strict";
+  var STORAGE_KEY = "videocompare_notes_v1";
+  var storageOK = true;
+  try { localStorage.setItem("__t","1"); localStorage.removeItem("__t"); } catch(e){ storageOK = false; }
+  var store = storageOK ? localStorage : (typeof sessionStorage !== "undefined" ? sessionStorage : null);
+
+  var videoA = null, videoB = null;
+  var checkpointsA = {}, checkpointsB = {};
+
+  function setupVideo(fileInputId, holderId, metaId, letter){
+    var input = document.getElementById(fileInputId);
+    input.addEventListener("change", function(){
+      if (!input.files || !input.files.length) return;
+      var file = input.files[0];
+      var url = URL.createObjectURL(file);
+      var holder = document.getElementById(holderId);
+      holder.innerHTML = "";
+      var vid = document.createElement("video");
+      vid.src = url;
+      vid.controls = true;
+      vid.playsInline = true;
+      holder.appendChild(vid);
+      document.getElementById(metaId).textContent = file.name + " — " + (file.size/1024/1024).toFixed(1) + " MB";
+      if (letter === "A"){ videoA = vid; checkpointsA = {}; } else { videoB = vid; checkpointsB = {}; }
+      applySpeed();
+      rebuildCheckpointJumpUI();
+    });
+  }
+  setupVideo("file-a","video-a-holder","meta-a","A");
+  setupVideo("file-b","video-b-holder","meta-b","B");
+
+  document.getElementById("flip-a").addEventListener("click", function(){
+    this.classList.toggle("active");
+    if (videoA) videoA.classList.toggle("mirrored");
+  });
+  document.getElementById("flip-b").addEventListener("click", function(){
+    this.classList.toggle("active");
+    if (videoB) videoB.classList.toggle("mirrored");
+  });
+
+  function applySpeed(){
+    var rate = parseFloat(document.getElementById("speed-select").value);
+    if (videoA) videoA.playbackRate = rate;
+    if (videoB) videoB.playbackRate = rate;
+  }
+  document.getElementById("speed-select").addEventListener("change", applySpeed);
+
+  document.getElementById("play-both").addEventListener("click", function(){
+    if (videoA) videoA.play();
+    if (videoB) videoB.play();
+  });
+  document.getElementById("pause-both").addEventListener("click", function(){
+    if (videoA) videoA.pause();
+    if (videoB) videoB.pause();
+  });
+  document.getElementById("restart-both").addEventListener("click", function(){
+    if (videoA){ videoA.currentTime = 0; videoA.pause(); }
+    if (videoB){ videoB.currentTime = 0; videoB.pause(); }
+  });
+  var STEP = 0.05;
+  document.getElementById("step-fwd").addEventListener("click", function(){
+    if (videoA){ videoA.pause(); videoA.currentTime = Math.min(videoA.duration||1e9, videoA.currentTime + STEP); }
+    if (videoB){ videoB.pause(); videoB.currentTime = Math.min(videoB.duration||1e9, videoB.currentTime + STEP); }
+  });
+  document.getElementById("step-back").addEventListener("click", function(){
+    if (videoA){ videoA.pause(); videoA.currentTime = Math.max(0, videoA.currentTime - STEP); }
+    if (videoB){ videoB.pause(); videoB.currentTime = Math.max(0, videoB.currentTime - STEP); }
+  });
+
+  var cpButtons = document.querySelectorAll(".checkpoint-btn[data-cp]");
+  for (var i=0;i<cpButtons.length;i++){
+    cpButtons[i].addEventListener("click", function(){
+      var cp = this.getAttribute("data-cp");
+      if (videoA){ checkpointsA[cp] = videoA.currentTime; }
+      if (videoB){ checkpointsB[cp] = videoB.currentTime; }
+      this.classList.add("set");
+      rebuildCheckpointJumpUI();
+    });
+  }
+
+  function rebuildCheckpointJumpUI(){
+    var wrap = document.getElementById("checkpoint-jump");
+    var btnRow = document.getElementById("checkpoint-jump-buttons");
+    var cps = Object.keys(checkpointsA).length ? checkpointsA : checkpointsB;
+    var keys = Object.keys(cps);
+    if (!keys.length){ wrap.style.display = "none"; return; }
+    wrap.style.display = "flex";
+    btnRow.innerHTML = "";
+    keys.forEach(function(cp){
+      var b = document.createElement("button");
+      b.className = "checkpoint-btn set";
+      b.textContent = cp.charAt(0).toUpperCase() + cp.slice(1);
+      b.addEventListener("click", function(){
+        if (videoA && checkpointsA[cp] !== undefined){ videoA.pause(); videoA.currentTime = checkpointsA[cp]; }
+        if (videoB && checkpointsB[cp] !== undefined){ videoB.pause(); videoB.currentTime = checkpointsB[cp]; }
+      });
+      btnRow.appendChild(b);
+    });
+  }
+
+  function loadNotes(){
+    if (!store) return [];
+    try { return JSON.parse(store.getItem(STORAGE_KEY) || "[]"); } catch(e){ return []; }
+  }
+  function saveNotes(notes){ if (store) store.setItem(STORAGE_KEY, JSON.stringify(notes)); }
+  function renderNotes(){
+    var notes = loadNotes();
+    var log = document.getElementById("note-log");
+    log.innerHTML = "";
+    notes.slice().reverse().forEach(function(n){
+      var div = document.createElement("div");
+      div.className = "note-item";
+      div.innerHTML = "<div class='nd'>"+n.date+"</div><div>"+n.text+"</div>";
+      log.appendChild(div);
+    });
+  }
+  document.getElementById("note-btn").addEventListener("click", function(){
+    var dateEl = document.getElementById("note-date");
+    var textEl = document.getElementById("note-text");
+    var date = dateEl.value.trim(), text = textEl.value.trim();
+    if (!date || !text){ alert("Add both a date and a note."); return; }
+    var notes = loadNotes();
+    notes.push({ date: date, text: text });
+    saveNotes(notes);
+    dateEl.value = ""; textEl.value = "";
+    renderNotes();
+  });
+  renderNotes();
+})();
+</script>
+</body>
+</html>

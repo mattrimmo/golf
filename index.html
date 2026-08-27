@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matt's Golf Toolkit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-deep:#173628; --green-mid:#2c5c44; --green-line:#3f7857;
+    --cream:#f6f1e2; --paper:#fbf8ef; --ink:#1c1b16; --ink-soft:#5b5847;
+    --hairline:#d9d0b4; --red:#a8362a; --red-soft:#c8564a; --gold:#b58a2e;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--cream); color:var(--ink); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;}
+
+  header.top{background:var(--green-deep); color:var(--cream); padding:34px 24px 26px; border-bottom:4px solid var(--red); position:relative;}
+  header.top:before{
+    content:""; position:absolute; inset:0;
+    background-image:repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 64px);
+    pointer-events:none;
+  }
+  .top-inner{max-width:1000px; margin:0 auto; position:relative;}
+  .eyebrow{font-family:'Barlow Condensed',sans-serif; letter-spacing:0.24em; text-transform:uppercase; font-size:12px; color:var(--gold); font-weight:600;}
+  h1.title{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:46px; margin:6px 0 8px; line-height:1;}
+  .subtitle{font-size:14.5px; color:#cfe0d3; max-width:600px;}
+
+  main{max-width:1000px; margin:0 auto; padding:34px 24px 70px;}
+
+  .tool-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:18px; margin-bottom:36px;}
+
+  a.tool-card{
+    display:block; background:var(--paper); border:1px solid var(--hairline); border-left:4px solid var(--green-mid);
+    padding:22px 22px 20px; text-decoration:none; color:var(--ink); position:relative; transition:border-color 0.15s;
+  }
+  a.tool-card:hover{border-left-color:var(--red);}
+  a.tool-card .no{
+    position:absolute; top:18px; right:20px; font-family:'Barlow Condensed',sans-serif;
+    font-size:13px; color:var(--ink-soft); letter-spacing:0.06em;
+  }
+  a.tool-card h2{font-family:'Barlow Condensed',sans-serif; font-size:24px; margin:0 0 8px; padding-right:36px;}
+  a.tool-card p{font-size:13.5px; color:var(--ink-soft); margin:0 0 14px; line-height:1.5;}
+  a.tool-card .open{
+    font-family:'Barlow Condensed',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--green-deep); font-weight:600;
+  }
+  a.tool-card .open:after{content:" →"; }
+
+  .tool-card.coming{opacity:0.55; border-left-color:var(--hairline); cursor:default;}
+  .tool-card.coming .open{color:var(--ink-soft);}
+
+  .note{
+    font-size:12.5px; color:var(--ink-soft); border-top:1px solid var(--hairline); padding-top:16px; margin-top:6px;
+  }
+  footer{max-width:1000px; margin:0 auto; padding:0 24px 40px; color:var(--ink-soft); font-size:11.5px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="eyebrow">Whalebone Golf Centre &middot; Self-Directed Improvement</div>
+    <h1 class="title">Matt's Golf Toolkit</h1>
+    <div class="subtitle">One place for everything &mdash; swing data, video, and equipment decisions, all built to work together instead of living as separate one-off tools.</div>
+  </div>
+</header>
+
+<main>
+  <div class="tool-grid">
+    <a class="tool-card" href="swing-tracker.html">
+      <span class="no">01</span>
+      <h2>Swing Tracker</h2>
+      <p>Every SwingSync session, trended across all clubs. Fault frequency, session comparison, date filtering, and an adaptive next-session plan with a full drill library.</p>
+      <span class="open">Open</span>
+    </a>
+
+    <a class="tool-card" href="video-compare.html">
+      <span class="no">02</span>
+      <h2>Swing Video Compare</h2>
+      <p>Load two clips side by side, slow them down together, mark checkpoints, and cross-check what the camera actually shows against what SwingSync predicted.</p>
+      <span class="open">Open</span>
+    </a>
+
+    <a class="tool-card" href="equipment-log.html">
+      <span class="no">03</span>
+      <h2>Equipment Log</h2>
+      <p>Every club under consideration, testing, or bought &mdash; with the reasoning behind each call, sorted by priority so the gap wedge doesn't get lost among the driver research.</p>
+      <span class="open">Open</span>
+    </a>
+
+    <div class="tool-card coming">
+      <span class="no">04</span>
+      <h2>Mobility Correlation</h2>
+      <p>Checking rotation mobility progress against swing path trends. Waiting on an export from the mobility log tool before this can go live.</p>
+      <span class="open">Coming soon</span>
+    </div>
+  </div>
+
+  <div class="note">Each tool stores its own data locally in your browser &mdash; nothing here talks to a server, and nothing you log in one tool is visible to another. Keep all four files in the same folder so the links above work.</div>
+</main>
+
+<footer>Matt's Golf Toolkit &middot; low-cost, self-directed golf improvement in place of a coach</footer>
+</body>
+</html>
