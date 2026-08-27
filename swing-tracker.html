@@ -5,22 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Swing Tracker — Matt</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <style>
   :root{
-    --green-deep:#173628;
-    --green-mid:#2c5c44;
-    --green-line:#3f7857;
-    --cream:#f6f1e2;
-    --paper:#fbf8ef;
-    --ink:#1c1b16;
-    --ink-soft:#5b5847;
-    --hairline:#d9d0b4;
-    --red:#a8362a;
-    --red-soft:#c8564a;
-    --gold:#b58a2e;
+    --green-deep:#163a2f;
+    --green-mid:#235e49;
+    --green-line:#4a8f6f;
+    --cream:#f4f3ee;
+    --paper:#fcfcfa;
+    --ink:#16150f;
+    --ink-soft:#55524a;
+    --hairline:#dcdad0;
+    --red:#8c2a2b;
+    --red-soft:#a8423f;
+    --gold:#c3a468;
+    --navy:#00205b;
+    --navy-soft:#1b3b7a;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -38,7 +40,7 @@
     color:var(--cream);
     padding:28px 24px 22px;
     position:relative;
-    border-bottom:4px solid var(--red);
+    border-bottom:3px solid var(--gold);
   }
   header.top:before{
     content:"";
@@ -56,14 +58,23 @@
     font-weight:600;
   }
   h1.title{
-    font-family:'Barlow Condensed',sans-serif;
-    font-weight:700;
+    font-family:'Fraunces',serif;
+    font-weight:600;
     font-size:44px;
-    letter-spacing:0.01em;
+    letter-spacing:-0.01em;
     margin:4px 0 6px;
-    line-height:1;
+    line-height:0.98;
   }
   .subtitle{font-size:14px;color:#cfe0d3;max-width:640px;}
+  .home-link{
+    display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:12.5px; letter-spacing:0.04em;
+    text-transform:uppercase; color:#a9c9b6; text-decoration:none; margin-bottom:8px; font-weight:600;
+  }
+  .home-link:hover{color:#fff;}
+  .crest{
+    position:absolute; top:22px; right:24px; width:46px; height:46px; opacity:0.92;
+  }
+  @media(max-width:640px){ .crest{width:34px; height:34px; top:18px; right:16px;} }
 
   nav.tabs{
     max-width:1180px;margin:22px auto 0;
@@ -84,7 +95,7 @@
   }
   nav.tabs button.active{
     color:#fff;
-    border-bottom:3px solid var(--red);
+    border-bottom:3px solid var(--gold);
   }
   nav.tabs button:hover{color:#fff;}
 
@@ -129,6 +140,7 @@
     font-family:'Barlow Condensed',sans-serif;
     font-size:26px; font-weight:700;
     border-bottom:2px solid var(--green-deep);
+    box-shadow:0 3px 0 -1px var(--gold);
     padding-bottom:6px; margin:0 0 4px;
   }
   p.section-note{color:var(--ink-soft); font-size:13.5px; margin:6px 0 20px; max-width:760px;}
@@ -145,7 +157,7 @@
     background:var(--paper); color:var(--ink);
     cursor:pointer; font-weight:600;
   }
-  .club-chip.active{background:var(--green-deep); color:#fff; border-color:var(--green-deep);}
+  .club-chip.active{background:var(--navy); color:#fff; border-color:var(--navy);}
 
   .chart-grid{
     display:grid; grid-template-columns:repeat(auto-fit, minmax(340px,1fr));
@@ -192,11 +204,11 @@
     border:1px solid var(--hairline); background:#fff; width:100%;
   }
   button.primary{
-    font-family:'Barlow Condensed',sans-serif; background:var(--red); color:#fff;
+    font-family:'Barlow Condensed',sans-serif; background:var(--navy); color:#fff;
     border:none; padding:9px 20px; font-size:14px; letter-spacing:0.03em;
     text-transform:uppercase; cursor:pointer; font-weight:600;
   }
-  button.primary:hover{background:var(--red-soft);}
+  button.primary:hover{background:var(--navy-soft);}
   button.ghost{
     font-family:'Barlow Condensed',sans-serif; background:none; color:var(--green-deep);
     border:1px solid var(--green-deep); padding:8px 16px; font-size:13px;
@@ -219,7 +231,7 @@
   .badge{
     display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:11px;
     letter-spacing:0.06em; text-transform:uppercase; padding:2px 8px;
-    background:var(--green-deep); color:#fff; font-weight:600; margin-left:8px;
+    background:var(--gold); color:var(--ink); font-weight:700; margin-left:8px;
   }
   footer{
     max-width:1180px;margin:0 auto;padding:0 24px 40px; color:var(--ink-soft); font-size:11.5px;
@@ -304,6 +316,13 @@
 
 <header class="top">
   <div class="top-inner">
+    <svg class="crest" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <line x1="50" y1="14" x2="50" y2="80" stroke="var(--gold)" stroke-width="2.5"/>
+      <path d="M50 14 L88 26 L50 38 Z" fill="var(--gold)"/>
+      <ellipse cx="50" cy="84" rx="20" ry="5" fill="none" stroke="var(--gold)" stroke-width="2" opacity="0.6"/>
+      <circle cx="50" cy="84" r="3.5" fill="var(--gold)"/>
+    </svg>
+    <a class="home-link" href="index.html">&larr; All Tools</a>
     <div class="eyebrow">Whalebone Golf Centre &middot; Range &amp; Short Game Log</div>
     <h1 class="title">Matt's Swing Tracker</h1>
     <div class="subtitle">Every SwingSync session, one view. Not what a session felt like — what it actually did.</div>
@@ -460,7 +479,7 @@ var EMBEDDED_DATA = {"sessions": [{"ts": "2026-06-25T19:05:37.000Z", "date": "20
 
   var CLUB_ORDER = ["Driver","3 Wood","4 Hybrid","4 Iron","5 Iron","6 Iron","7 Iron","8 Iron","9 Iron","Pitching Wedge","Sand Wedge"];
 
-  var GREEN = "#2c5c44", RED = "#a8362a", GOLD = "#b58a2e", INK = "#1c1b16", SOFT = "#5b5847", LINEGRID = "#d9d0b4";
+  var GREEN = "#235e49", RED = "#8c2a2b", GOLD = "#c3a468", INK = "#16150f", SOFT = "#55524a", LINEGRID = "#dcdad0";
   Chart.defaults.font.family = "'Inter', sans-serif";
   Chart.defaults.color = SOFT;
   Chart.defaults.borderColor = LINEGRID;
@@ -799,7 +818,7 @@ var EMBEDDED_DATA = {"sessions": [{"ts": "2026-06-25T19:05:37.000Z", "date": "20
       if (idx === RANGE_SESSIONS.length-1) lastCounts = counts;
     });
 
-    var colors = { "Shank": RED, "Top": "#7a4b1f", "Slice": "#c8564a", "Hook": "#7d8f4c", "Push": GOLD, "Pull": "#6d8fae", "Straight / Good": GREEN };
+    var colors = { "Shank": RED, "Top": "#7a4b1f", "Slice": "#a8423f", "Hook": "#7d8f4c", "Push": GOLD, "Pull": "#6d8fae", "Straight / Good": GREEN };
 
     if (faultChartInstance) faultChartInstance.destroy();
     faultChartInstance = new Chart(document.getElementById("chart-faults"), {
@@ -1226,6 +1245,17 @@ var EMBEDDED_DATA = {"sessions": [{"ts": "2026-06-25T19:05:37.000Z", "date": "20
       ],
       lookFor: "A grip that's drifted stronger than 2.5 knuckles / V's-to-right-shoulder tends to close the face through impact — this is what's likely behind the overclosing already flagged on your 9 iron and 4 hybrid."
     },
+    alignmentcheck: {
+      name: "Two-Club Alignment Check", tag: "Range", group: "Setup & Alignment", equipment: "Two spare clubs from the bag (swap for alignment sticks later if you pick a pair up — same drill either way).",
+      steps: [
+        "Find the actual target on the range (the flag or yardage marker you're aiming at), not just the direction the bay's paint or lines are pointing.",
+        "Lay one club on the ground running from just outside the ball to that real target — this is your true target line.",
+        "Lay the second club parallel to it, a few inches in front of your toes, and set your feet, hips and shoulders square to that club rather than to the bay itself.",
+        "Hit your session as normal with the lines down.",
+        "Recheck the lines if you change bays or move position mid-session, since bays aren't always aligned the same way even at the same range."
+      ],
+      lookFor: "This isn't a swing fix, it's a data fix — Toptracer's offline and path numbers are only as good as how square you actually were to the real target, not the bay's own lines. If your offline dispersion tightens up noticeably once you're doing this consistently, that tells you how much of the past spread was bay misalignment rather than genuine swing inconsistency. Worth a note in Add Session the first time you use it properly, so it's on record as a before/after point."
+    },
     prerehearsal: {
       name: "Pre-Session Rehearsal", tag: "Home", group: "Consistency", equipment: "None — a few minutes before you hit anything, ball or no ball.",
       steps: [
@@ -1249,7 +1279,7 @@ var EMBEDDED_DATA = {"sessions": [{"ts": "2026-06-25T19:05:37.000Z", "date": "20
       if (!groups[d.group]) groups[d.group] = [];
       groups[d.group].push(d);
     });
-    var groupOrder = ["Path — Out-to-in", "Face Control", "Strike Quality", "Consistency"];
+    var groupOrder = ["Setup & Alignment", "Path — Out-to-in", "Face Control", "Strike Quality", "Consistency"];
     groupOrder.forEach(function(g){
       if (!groups[g]) return;
       var section = document.createElement("div");
